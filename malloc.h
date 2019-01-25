@@ -10,16 +10,22 @@
 
 #include <stdio.h>
 
-typedef struct chunck chunck_t;
-struct chunck {
+typedef struct chunk chunk_t;
+struct chunk {
     size_t data_size;
     int is_free;
-    chunck_t *next;
+    chunk_t *next;
 };
 
-static void *start = NULL;
+extern void *start;
 
 //malloc.c
 void *malloc(size_t size);
+chunk_t *extend_heap(size_t size);
+chunk_t *find_free_chunk(size_t size);
+void split_chunk(chunk_t *chunk, size_t size);
+
+//show_alloc_mem.c
+void show_alloc_mem();
 
 #endif

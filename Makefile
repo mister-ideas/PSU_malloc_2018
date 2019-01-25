@@ -7,7 +7,8 @@
 
 CC=			gcc
 
-SRC=		malloc.c
+SRC=		malloc.c	\
+			show_alloc_mem.c
 
 OBJ=		$(SRC:.c=.o)
 
