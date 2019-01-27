@@ -6,14 +6,13 @@
 */
 
 #include <unistd.h>
-#include <stdio.h>
 #include "malloc.h"
 
 void *start = NULL;
 
 void split_chunk(chunk_t *chunk, size_t size)
 {
-    chunk_t *new;
+    chunk_t *new = NULL;
 
     new = chunk + sizeof(struct chunk) + size;
     new->data_size = chunk->data_size - (sizeof(struct chunk) + size);
@@ -38,9 +37,9 @@ chunk_t *find_free_chunk(size_t size)
 chunk_t *extend_heap(size_t size)
 {
     chunk_t *head = start;
-    chunk_t *new;
+    chunk_t *new = NULL;
 
-    while (head)
+    while (head && head->next)
         head = head->next;
     new = sbrk(0);
     if (!new || sbrk(sizeof(struct chunk) + size) == (void *) -1)
@@ -56,25 +55,17 @@ chunk_t *extend_heap(size_t size)
 
 void *malloc(size_t size)
 {
-    chunk_t *new;
+    chunk_t *new = NULL;
 
-    if (start) {
-        printf("MALLOC: not null\n");
-        new = find_free_chunk(size);
-        if (new) {
-            if (new->data_size - size > sizeof(struct chunk) + 4)
-                split_chunk(new, size);
-            new->is_free = 0;
-        } else {
-            new = extend_heap(size);
-            if (!new)
-                return (NULL);
-        }
+    new = find_free_chunk(size);
+    if (new) {
+        if (new->data_size - size > sizeof(struct chunk) + 1)
+            split_chunk(new, size);
+        new->is_free = 0;
     } else {
         new = extend_heap(size);
         if (!new)
             return (NULL);
-        start = new;
     }
     return (new);
 }

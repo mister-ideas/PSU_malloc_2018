@@ -6,7 +6,6 @@
 */
 
 #include <unistd.h>
-#include <stdio.h>
 #include "malloc.h"
 
 void show_alloc_mem()
@@ -14,8 +13,9 @@ void show_alloc_mem()
     chunk_t *head = start;
 
     printf("break : %p\n", sbrk(0));
+    if (!head)
+        start = NULL;
     while (head) {
-        printf("SHOW: not null\n");
         if (head->next)
             printf("%p - %p : %zu bytes\n", head, head->next, head->data_size);
         else
