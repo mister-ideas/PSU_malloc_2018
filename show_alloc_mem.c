@@ -17,11 +17,9 @@ void show_alloc_mem()
         start = NULL;
     while (head) {
         if (head->next)
-            printf("%p - %p : %zu bytes\n", head + sizeof(struct chunk),
-            head->next - sizeof(struct chunk), head->data_size);
+            printf("%p - %p : %zu bytes\n", head->end, head->next, head->data_size);
         else
-            printf("%p - %p : %zu bytes\n", head + sizeof(struct chunk),
-            sbrk(0), head->data_size);
+            printf("%p - %p : %zu bytes\n", head->end, sbrk(0), head->data_size);
         head = head->next;
     }
 }

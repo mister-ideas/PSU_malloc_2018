@@ -14,7 +14,7 @@ void split_chunk(chunk_t *chunk, size_t size)
 {
     chunk_t *new = NULL;
 
-    new = chunk + sizeof(struct chunk) + size;
+    new = chunk->end + size;
     new->data_size = chunk->data_size - (sizeof(struct chunk) + size);
     new->next = chunk->next;
     new->is_free = 1;
@@ -42,7 +42,10 @@ chunk_t *extend_heap(size_t size)
     while (head && head->next)
         head = head->next;
     new = sbrk(0);
-    if (!new || sbrk(sizeof(struct chunk) + size) == (void *) -1)
+    if (!new || sbrk(sizeof(struct chunk)) == (void *) -1)
+        return (NULL);
+    new->end = sbrk(size);
+    if (new->end == (void *) -1)
         return (NULL);
     new->data_size = size;
     new->next = NULL;
@@ -57,9 +60,10 @@ void *malloc(size_t size)
 {
     chunk_t *new = NULL;
 
+    size = (size - 1) / 4 * 4 + 4;
     new = find_free_chunk(size);
     if (new) {
-        if (new->data_size - size > sizeof(struct chunk) + 1)
+        if (new->data_size - size > sizeof(struct chunk) + 4)
             split_chunk(new, size);
         new->is_free = 0;
     } else {
@@ -67,5 +71,5 @@ void *malloc(size_t size)
         if (!new)
             return (NULL);
     }
-    return (new);
+    return (new->end);
 }
