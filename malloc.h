@@ -33,6 +33,6 @@ int check_adress(void *ptr);
 void free(void *ptr);
 
 //show_alloc_mem.c
-void show_alloc_mem();
+void show_alloc_mem(void);
 
 #endif
