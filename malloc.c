@@ -17,6 +17,7 @@ void split_chunk(chunk_t *chunk, size_t size)
     new = chunk->end + size;
     new->data_size = chunk->data_size - (sizeof(struct chunk) + size);
     new->next = chunk->next;
+    new->prev = chunk;
     new->is_free = 1;
     chunk->data_size = size;
     chunk->next = new;
@@ -39,8 +40,6 @@ chunk_t *extend_heap(size_t size)
     chunk_t *head = start;
     chunk_t *new = NULL;
 
-    while (head && head->next)
-        head = head->next;
     new = sbrk(0);
     if (!new || sbrk(sizeof(struct chunk)) == (void *) -1)
         return (NULL);
@@ -49,10 +48,15 @@ chunk_t *extend_heap(size_t size)
         return (NULL);
     new->data_size = size;
     new->next = NULL;
-    if (start)
+    while (head && head->next)
+        head = head->next;
+    if (start) {
+        new->prev = head;
         head->next = new;
-    else
+    } else {
+        new->prev = NULL;
         start = new;
+    }
     return (new);
 }
 

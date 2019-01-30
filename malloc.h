@@ -16,6 +16,7 @@ struct chunk {
     int is_free;
     void *end;
     chunk_t *next;
+    chunk_t *prev;
 };
 
 extern void *start;
@@ -27,6 +28,8 @@ chunk_t *find_free_chunk(size_t size);
 void split_chunk(chunk_t *chunk, size_t size);
 
 //free.c
+chunk_t *chunk_fusion(chunk_t *chunk);
+int check_adress(void *ptr);
 void free(void *ptr);
 
 //show_alloc_mem.c
