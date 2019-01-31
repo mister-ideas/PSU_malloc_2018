@@ -15,6 +15,8 @@ void *realloc(void *ptr, size_t size)
     void *new_end = NULL;
 
     size = ((((size - 1) >> 3) << 3) + 8);
+    if (!ptr)
+        return (malloc(size));
     if (check_adress(ptr) == 1) {
         new_end = malloc(size);
         if (!new_end)
