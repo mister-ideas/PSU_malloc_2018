@@ -32,6 +32,9 @@ chunk_t *chunk_fusion(chunk_t *chunk);
 int check_adress(void *ptr);
 void free(void *ptr);
 
+//realloc.c
+void *realloc(void *ptr, size_t size);
+
 //show_alloc_mem.c
 void show_alloc_mem(void);
 

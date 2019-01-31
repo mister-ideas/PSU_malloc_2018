@@ -9,7 +9,8 @@ CC=			gcc
 
 SRC=		malloc.c			\
 			show_alloc_mem.c	\
-			free.c
+			free.c				\
+			realloc.c
 
 OBJ=		$(SRC:.c=.o)
 
@@ -24,7 +25,7 @@ RM=			rm -f
 all:		$(NAME)
 
 $(NAME):	$(OBJ)
-			$(CC) $(CFLAGS) $(SRC) -shared -fPIC -o $(NAME)
+			$(CC) -g $(CFLAGS) $(SRC) -shared -fPIC -o $(NAME)
 
 clean:
 			$(RM) $(OBJ)
