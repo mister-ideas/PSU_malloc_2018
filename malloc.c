@@ -14,14 +14,16 @@ void split_chunk(chunk_t *chunk, size_t size)
 {
     chunk_t *new = NULL;
 
+    if (chunk->is_free)
+        chunk->is_free = 0;
     new = (chunk_t *)(chunk->end + size);
     new->end = chunk->end + size + sizeof(struct chunk);
     new->data_size = chunk->data_size - (sizeof(struct chunk) + size);
     new->next = chunk->next;
-    if (new->next)
-        new->next->prev = new;
     new->prev = chunk;
     new->is_free = 1;
+    if (new->next)
+        new->next->prev = new;
     chunk->data_size = size;
     chunk->next = new;
 }
