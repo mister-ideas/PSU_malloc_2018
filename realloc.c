@@ -17,19 +17,13 @@ void *realloc(void *ptr, size_t size)
     size = ((((size - 1) >> 3) << 3) + 8);
     if (check_adress(ptr) == 1) {
         chunk = (chunk_t*)(ptr -= sizeof(struct chunk));
-        if (chunk->data_size >= size
-        && chunk->data_size - size >= sizeof(struct chunk) + 8) {
-            split_chunk(chunk, size);
-            return (ptr);
-        } else {
-            new_end = malloc(size);
-            if (!new_end)
-                return (NULL);
-            new = (chunk_t*)(new_end -= sizeof(struct chunk));
-            memmove(new->end, chunk->end, new->data_size);
-            free(chunk->end);
-            return (new->end);
-        }
+        new_end = malloc(size);
+        if (!new_end)
+            return (NULL);
+        new = (chunk_t*)(new_end -= sizeof(struct chunk));
+        memmove(new->end, chunk->end, new->data_size);
+        free(chunk->end);
+        return (new->end);
     }
     return (NULL);
 }
