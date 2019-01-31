@@ -14,8 +14,6 @@ void split_chunk(chunk_t *chunk, size_t size)
 {
     chunk_t *new = NULL;
 
-    if (chunk->is_free)
-        chunk->is_free = 0;
     new = (chunk_t *)(chunk->end + size);
     new->end = chunk->end + size + sizeof(struct chunk);
     new->data_size = chunk->data_size - (sizeof(struct chunk) + size);
