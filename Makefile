@@ -25,7 +25,7 @@ RM=			rm -f
 all:		$(NAME)
 
 $(NAME):	$(OBJ)
-			$(CC) -g $(CFLAGS) $(SRC) -shared -fPIC -o $(NAME)
+			$(CC) $(CFLAGS) $(SRC) -shared -fPIC -o $(NAME)
 
 clean:
 			$(RM) $(OBJ)
