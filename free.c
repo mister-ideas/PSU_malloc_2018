@@ -33,7 +33,7 @@ int check_adress(void *ptr)
 
 void free(void *ptr)
 {
-    chunk_t *chunk;
+    chunk_t *chunk = NULL;
 
     if (check_adress(ptr) == 1) {
         chunk = (chunk_t*)(ptr -= sizeof(struct chunk));
