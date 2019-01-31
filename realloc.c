@@ -16,11 +16,11 @@ void *realloc(void *ptr, size_t size)
 
     size = ((((size - 1) >> 3) << 3) + 8);
     if (check_adress(ptr) == 1) {
-        chunk = (chunk_t*)(ptr -= sizeof(struct chunk));
         new_end = malloc(size);
         if (!new_end)
             return (NULL);
         new = (chunk_t*)(new_end -= sizeof(struct chunk));
+        chunk = (chunk_t*)(ptr -= sizeof(struct chunk));
         memmove(new->end, chunk->end, new->data_size);
         free(chunk->end);
         return (new->end);
