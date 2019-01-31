@@ -67,10 +67,10 @@ void *malloc(size_t size)
 {
     chunk_t *new = NULL;
 
-    size = (size - 1) / 4 * 4 + 4;
+    size = ((((size - 1) >> 3) << 3) + 8);
     new = find_free_chunk(size);
     if (new) {
-        if (new->data_size - size > sizeof(struct chunk) + 4)
+        if (new->data_size - size > sizeof(struct chunk) + 8)
             split_chunk(new, size);
         new->is_free = 0;
     } else {

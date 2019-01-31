@@ -14,11 +14,11 @@ void *realloc(void *ptr, size_t size)
     chunk_t *new = NULL;
     void *new_end = NULL;
 
-    size = (size - 1) / 4 * 4 + 4;
+    size = ((((size - 1) >> 3) << 3) + 8);
     if (check_adress(ptr) == 1) {
         chunk = (chunk_t*)(ptr -= sizeof(struct chunk));
         if (chunk->data_size >= size
-        && chunk->data_size - size >= sizeof(struct chunk) + 4) {
+        && chunk->data_size - size >= sizeof(struct chunk) + 8) {
             split_chunk(chunk, size);
             return (ptr);
         } else {
