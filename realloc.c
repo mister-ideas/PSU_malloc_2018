@@ -26,7 +26,7 @@ void *realloc(void *ptr, size_t size)
             if (!new_end)
                 return (NULL);
             new = (chunk_t*)(new_end -= sizeof(struct chunk));
-            memcpy(new->end, chunk->end, new->data_size);
+            memmove(new->end, chunk->end, new->data_size);
             free(chunk->end);
             return (new->end);
         }
