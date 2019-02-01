@@ -51,6 +51,7 @@ chunk_t *extend_heap(size_t size)
         return (NULL);
     new->data_size = size;
     new->next = NULL;
+    new->is_free = 0;
     while (head && head->next)
         head = head->next;
     if (start) {
