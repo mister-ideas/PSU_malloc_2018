@@ -44,7 +44,7 @@ chunk_t *extend_heap(size_t size)
     chunk_t *new = NULL;
 
     new = sbrk(0);
-    if (!new || sbrk(sizeof(struct chunk)) == (void *) -1)
+    if (new == (void *) -1 || sbrk(sizeof(struct chunk)) == (void *) -1)
         return (NULL);
     new->end = sbrk(size);
     if (new->end == (void *) -1)
