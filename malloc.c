@@ -42,16 +42,14 @@ chunk_t *extend_heap(size_t size)
 {
     chunk_t *head = start;
     chunk_t *new = NULL;
-    size_t pages_size = ((size + sizeof(struct chunk)) / getpagesize() + 1)
-    * getpagesize();
 
     new = sbrk(0);
     if (new == (void *) -1 || sbrk(sizeof(struct chunk)) == (void *) -1)
         return (NULL);
-    new->end = sbrk(pages_size - sizeof(struct chunk));
+    new->end = sbrk(size);
     if (new->end == (void *) -1)
         return (NULL);
-    new->data_size = pages_size - sizeof(struct chunk);
+    new->data_size = size;
     new->next = NULL;
     new->is_free = 0;
     while (head && head->next)
@@ -78,7 +76,6 @@ void *malloc(size_t size)
         new->is_free = 0;
     } else {
         new = extend_heap(size);
-        split_chunk(new, size);
         if (!new)
             return (NULL);
     }
